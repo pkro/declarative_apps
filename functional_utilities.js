@@ -6,3 +6,10 @@ export function curry(func) {
     return curry(func.bind(null, ...args));
   };
 }
+
+function compose() {
+  const funcs = Array.from(arguments).reverse();
+  return (val) => {
+    return funcs.reduce((acc, func) => func(acc), val);
+  };
+}
