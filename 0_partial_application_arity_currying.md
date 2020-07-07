@@ -2,6 +2,13 @@
 - number of arguments that a function uses
 - stored in length property of function object
 
+**Point free programming**
+- programming paradigm in which function definitions do not identify arguments ("points" ) on which they operate
+- example:
+  
+    const x = books.filter(point => isTechnology(point)) // NOT point free
+    const x = books.filter(isTechnology) // point free
+
 **Reminder: arrow functions**
 - don't get hoisted
 - context (this) is the context in which they are defined, not the one they are called in
