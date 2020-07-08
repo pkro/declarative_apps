@@ -30,6 +30,9 @@ log(num(10).equals(num(10)));
 // Identity law
 // identity must hold true no matter if left or right operand
 
+// Identity combinator (also see 2_2 for combinator term)
+const identity = (x) => x;
+
 // identity of addition is 0 -> every number +0 === number
 // addition :: Number -> Number -> Number
 const addition = curry((x, y) => x + y);
