@@ -3,7 +3,7 @@
 - stored in length property of function object
 
 **Point free programming**
-- programming paradigm in which function definitions do not identify arguments ("points" ) on which they operate
+- programming paradigm in which function definitions / usage do not identify arguments ("points" ) on which they operate
 - example:
   
     const x = books.filter(point => isTechnology(point)) // NOT point free
