@@ -1,5 +1,6 @@
 const { expect } = require('chai');
-const { compose, curry, equals } = require('ramda');
+const R = require('ramda');
+const { compose, curry, equals, apply, prepend } = R;
 const { log } = console;
 
 /***************************************************************************************/
@@ -85,8 +86,8 @@ doMathStuffWithLogPose(1);
 
 //point free and as method of compose
 compose.clog = compose(
-  apply(compose), // doesn't work - why?
-  prepend(trace),
-  reduce((acc, fn) => [...acc, fn, trace], []),
-  Array
+  R.apply(compose), // compose resulting list
+  R.prepend(trace), // prepend resulting list with the trace function so we have the end result
+  R.reduce((acc, fn) => [...acc, fn, trace], []), // put trace between each step
+  Array // make an array from the arguments
 );
