@@ -76,6 +76,7 @@ T42((a) => a + 1); // 43
 const D = (f) => (x) => (g) => (y) => f(x)(g(y));
 
 //S(ubstitution) (or split) combinator
+// input: function that returns a function
 // (a → b → c) → (a → b) → a → c
 const S_uncurried = (f) => (g) => (x) => f(x)(g(x));
 const S = R.curry(S_uncurried);
