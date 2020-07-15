@@ -1,3 +1,4 @@
+// see folder for runnable webpack code
 const R = require('ramda');
 const { compose } = require('../../functional_utilities');
 const { S, B, T, I, K, C } = require('../../combinators');
