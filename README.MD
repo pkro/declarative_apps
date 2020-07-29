@@ -109,7 +109,7 @@ Curry any existing function:
     expect(curriedSum(5)(10)).to.be.a('function');
 
 
-    ## 1_1 Basic function composition
+## 1_1 Basic function composition
 
   **Higher Order functions**
 - takes other functions as input and / or return functions as output
@@ -153,7 +153,7 @@ Composition is basically a refactoring of a nested call strucure
 
   compose(**f,g,h**)(x)
 
-  ## 1_2 implement n-length composition with reduce
+## 1_2 implement n-length composition with reduce
 
   **Standard js implementation of reduce**
     function compose() {
@@ -375,6 +375,7 @@ webpack.config.js
     };
 
 
+## 3_1 Encapsulatio IO using generic containers
 
 **Generic containers**
 - used for encapsulating I/O
@@ -382,3 +383,4 @@ webpack.config.js
 - Hide and contain impurities
   - we could model results of impure operations (DOM manipulation) to have a virtual DOM and then have oner containerized impurity to do something impure (rendering to the actual DOM)
   
+## 3_2 Lazy evaluation using generic containers

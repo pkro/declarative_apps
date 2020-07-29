@@ -25,11 +25,16 @@ class IOContainer {
       throw `IOContainer expects a function, actual: ${R.type(fn)}`;
     }
   }
-  perform(fn) {
-    const val = this.value();
-    if (R.is(Function, fn)) {
-      return fn(val);
-    }
+
+  // IOContainer isn't a collection, so the map function can be thought of mapping over a 1-item array
+  // contrary to Array.map, this one is lazily evaluated - functions are only ran when perform() is run
+  // map :: (IOContainer io) => io (a -> b) ~> (b -> c) -> io (b -> c)
+  map(fn) {
+    return new IOContainer(() => fn(this.value()));
+  }
+
+  perform() {
+    this.value();
   }
 }
 
