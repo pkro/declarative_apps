@@ -384,3 +384,5 @@ webpack.config.js
   - we could model results of impure operations (DOM manipulation) to have a virtual DOM and then have oner containerized impurity to do something impure (rendering to the actual DOM)
   
 ## 3_2 Lazy evaluation using generic containers
+
+## 3_3 Connect impure code to pure composition
