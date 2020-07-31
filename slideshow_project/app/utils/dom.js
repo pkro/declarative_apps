@@ -7,6 +7,7 @@ import diff from "virtual-dom/diff";
 import createElement from "virtual-dom/create-element";
 import { compose } from "ramda";
 
+// turns strings of html into virtual nodes
 export const fromHTML = HTML({
   VNode: VNode,
   VText: VText,

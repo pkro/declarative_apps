@@ -386,3 +386,6 @@ webpack.config.js
 ## 3_2 Lazy evaluation using generic containers
 
 ## 3_3 Connect impure code to pure composition
+- reminder: compose(map(fn1), map(fn2)) === map(compose(fn1, fn2))
+- Generic container to encapsulate impure logic from pure code
+- lazy execution: delaying execution of function or chain of functions until they are needed
