@@ -16,9 +16,6 @@ function mainReducer(state, action) {
     case "TEST_ACTION":
       //return R.merge(state, {title: 'Packt Pub Presentation App'})
       return { ...state, title: "PAckt pub presentation app" };
-    case "CUSTOM_TITLE":
-      const title = action.value;
-      return { ...state, title };
     default:
       return state;
   }
@@ -28,6 +25,21 @@ const { getState, dispatch, subscribe } = createStore(
   mainReducer,
   initialState
 );
+
+// setItem :: (Str, *) -> IOContainer
+const setItem = (key, val) => {
+  return IOContainer.of(() => {
+    localStorage.setItem(key, JSON.stringify(val));
+  });
+};
+
+// getItem :: (Str) -> IOContainer
+const getItem = (itemKey) =>
+  IOContainer.of(() => localStorage.getItem(itemKey));
+
+// groupByProp :: Str -> [Obj] -> [[Obj]]
+const groupByProp = (key) =>
+  R.compose(R.groupWith(R.eqProps(key)), R.sortBy(R.prop(key)));
 
 const update = renderDOM((state) => {
   console.log("State @render ---> ", state);
@@ -45,11 +57,14 @@ subscribe(() => {
 });
 
 dispatch({ type: "TEST_ACTION" });
+// setupSlides :: (Mappable m) => m Str -> m [[Object]]
+const setupSlides = compose(
+  R.set(R.lensPath(["slides", 0, 0, "active"]), true),
+  R.over(R.lensProp("slides"), R.map(R.sortBy(R.prop("order")))),
+  R.over(R.lensProp("slides"), groupByProp("id")),
+  JSON.parse
+);
 
-let i = 0;
-setInterval(() => {
-  dispatch({
-    type: ["TEST_ACTION", "CUSTOM_TITLE"][++i % 2],
-    value: "We love functional programming",
-  });
-}, 10000);
+setItem("slides", slides).perform();
+
+getItem("slides").map(setupSlides).map(update).perform();
