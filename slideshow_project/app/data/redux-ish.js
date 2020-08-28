@@ -10,13 +10,16 @@ const logNextState = colorLog("State: ", "blue");
 // Action :: Object {type}
 // Store :: Object {subscribe, dispatch, getState}
 // createStore :: ((Action -> State), State) -> Store
-export function createStore(reducer, state) {
+export function createStore(reducer, state, middleware) {
   // these will not be changed internally but let is used to be able to reassign
   let currentState = state;
   let currentSubscribers = [];
   let nextSubscribers = [];
   let isDispatching = false;
 
+  if (R.is(Function, middleware)) {
+    return middleware(createStore)(reducer, state);
+  }
   const getState = () => currentState;
 
   const subscribe = (listenerFn) => {

@@ -6,27 +6,30 @@ import slides from "./data/slides";
 import Slideshow from "./components/Slideshow";
 import R from "ramda";
 import { createStore } from "./data/redux-ish";
-
+import mainReducer from "./data/reducers";
 // initialState :: Object
 const initialState = { title: "", slides: [] };
 
-// mainRecucer :: (Object, Object) -> Object
-function mainReducer(state, action) {
-  switch (action.type) {
-    case "TEST_ACTION":
-      //return R.merge(state, {title: 'Packt Pub Presentation App'})
-      return { ...state, title: "PAckt pub presentation app" };
-    case "CUSTOM_TITLE":
-      const title = action.value;
-      return { ...state, title };
-    default:
-      return state;
-  }
-}
+// returns a new api
+const middleware = R.curry((createStore, reducer, initialState) => {
+  return {
+    getState: () => {
+      console.log("called get state");
+      return { title: "title from middleware" };
+    },
+    dispatch: (action) => () => {
+      console.log(`dispatch with ${action.value} called`);
+    },
+    subscribe: (fn) => {
+      fn();
+    },
+  };
+});
 
 const { getState, dispatch, subscribe } = createStore(
   mainReducer,
-  initialState
+  initialState,
+  middleware
 );
 
 const update = renderDOM((state) => {
