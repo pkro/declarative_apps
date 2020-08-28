@@ -8,7 +8,7 @@ import R from "ramda";
 import { createStore } from "./data/redux-ish";
 import mainReducer from "./data/reducers";
 // initialState :: Object
-const initialState = { title: "", slides: [] };
+const initialState = { title: "", slides: [], money: 0 };
 
 // returns a new api
 const middleware = R.curry((createStore, reducer, initialState) => {
@@ -38,6 +38,7 @@ const update = renderDOM((state) => {
   return (
     <div className="container">
       <h2 className="title">{state.title}</h2>
+      <h5>MONEY: {state.money}</h5>
       <Slideshow slides={state.slides || []} />
     </div>
   );
@@ -49,6 +50,8 @@ subscribe(() => {
 });
 
 dispatch({ type: "TEST_ACTION" });
+dispatch({ type: "DEPOSIT", value: 10 });
+dispatch({ type: "WITHDRAW", value: 3 });
 
 let i = 0;
 setInterval(() => {
