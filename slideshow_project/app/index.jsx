@@ -12,17 +12,18 @@ const initialState = { title: "", slides: [] };
 
 // returns a new api
 const middleware = R.curry((createStore, reducer, initialState) => {
+  const actionHistory = [];
+  const store = createStore(reducer, initialState);
+
+  const middleDispatch = (action) => {
+    store.dispatch(action);
+    actionHistory.push(action);
+    console.log(actionHistory);
+  };
   return {
-    getState: () => {
-      console.log("called get state");
-      return { title: "title from middleware" };
-    },
-    dispatch: (action) => () => {
-      console.log(`dispatch with ${action.value} called`);
-    },
-    subscribe: (fn) => {
-      fn();
-    },
+    getState: store.getState,
+    dispatch: middleDispatch,
+    subscribe: store.subscribe,
   };
 });
 
