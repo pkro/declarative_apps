@@ -1,9 +1,15 @@
 import R from "ramda";
-import { setupSlides } from "../utils/slide-utils";
+import { setupSlides, activeSlide } from "../utils/slide-utils";
 // mainRecucer :: (Object, Object) -> Object
 export default function mainReducer(state, action) {
   const { type, value } = action;
   switch (action.type) {
+    case "MOVE_TO_SLIDE":
+      const slidePos = value;
+      const slides = state.presentation.slides || [];
+      return R.mergeDeepRight(state, {
+        presentation: { slidePos, slides: activeSlide(slidePos)(slides) },
+      });
     case "SETUP_SLIDES":
       const presentation = {
         ...state.presentation,
@@ -17,6 +23,7 @@ export default function mainReducer(state, action) {
       return R.mergeDeepRight(state, {
         settings: R.apply(R.objOf)(value),
       });
+
     case "TEST_ACTION":
       //return R.merge(state, {title: 'Packt Pub Presentation App'})
       return { ...state, title: "PAckt pub presentation app" };
