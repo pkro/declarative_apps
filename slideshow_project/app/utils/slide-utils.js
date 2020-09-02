@@ -37,7 +37,7 @@ export const setupSlides = compose(
 );
 
 // wipeActiveStatus :: [[{k: v}]] -> [[{k: v}]]
-export const wipeActiveStatus = map(map(omit(["active"])));
+export const wipeActiveStatus = map(map(omit(["active"]))); // removes active property from all slides
 
 // existsObjAt :: [Int, Int] -> ([[{k:v}]] -> Bool)
 export const existsObjAt = pathSatisfies(is(Object));
