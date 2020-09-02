@@ -11,9 +11,29 @@ import mainReducer from "./data/reducers";
 const initialState = { title: "", slides: [], money: 0 };
 
 // returns a new api
-const middleware = R.curry((createStore, reducer, initialState) => {
+const middleware = R.curry((createStore, reducer, initState) => {
   const actionHistory = [];
-  const store = createStore(reducer, initialState);
+  const store = createStore((state, action) => {
+    switch (action.type) {
+      case "@@/JUMP":
+        return R.reduce(
+          // loops through all actions up to in ar given by the slice in window.changeState below
+          (accState, nextAction) => {
+            console.log(nextAction.type, nextAction.value);
+            return reducer(accState, nextAction);
+          },
+          initState,
+          action.value
+        );
+      default:
+        return reducer(state, action);
+    }
+  }, initState);
+  // don't do this, just to demo rewinding in the browser console
+  window.changeState = (i) => {
+    actionHistory[i] &&
+      dispatch({ type: "@@/JUMP", value: R.slice(0, i, actionHistory) });
+  };
 
   const middleDispatch = (action) => {
     store.dispatch(action);
@@ -53,10 +73,10 @@ dispatch({ type: "TEST_ACTION" });
 dispatch({ type: "DEPOSIT", value: 10 });
 dispatch({ type: "WITHDRAW", value: 3 });
 
-let i = 0;
+/* let i = 0;
 setInterval(() => {
   dispatch({
     type: ["TEST_ACTION", "CUSTOM_TITLE"][++i % 2],
     value: "We love functional programming",
   });
-}, 10000);
+}, 10000); */
