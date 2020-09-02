@@ -8,7 +8,7 @@ export const {
   lensProp,
   compose,
   lensPath,
-  o,
+  o, // binary compose, like B combinator
   set,
   pathSatisfies,
   omit,
@@ -30,7 +30,7 @@ export const groupByProp = (key) =>
 export const setupSlides = compose(
   set(lensPath([0, 0, "active"]), true),
   prop("slides"),
-  o(
+  compose(
     over(lensProp("slides"), map(sortByOrder)),
     over(lensProp("slides"), groupByProp("id"))
   )
@@ -48,4 +48,7 @@ export const setActiveAt = (pos2dPath) =>
 
 // activeSlide :: [Int, Int] -> ([[{k: v}]] -> [[{k: v}]])
 export const activeSlide = (pos2dPath) =>
-  o(when(existsObjAt(pos2dPath), setActiveAt(pos2dPath)), wipeActiveStatus);
+  compose(
+    when(existsObjAt(pos2dPath), setActiveAt(pos2dPath)),
+    wipeActiveStatus
+  );
