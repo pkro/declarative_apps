@@ -7,45 +7,13 @@ import Slideshow from "./components/Slideshow";
 import R from "ramda";
 import { createStore } from "./data/redux-ish";
 import mainReducer from "./data/reducers";
+import middleware from "./utils/action-history-middleware";
+
 // initialState :: Object
-const initialState = { title: "", slides: [], money: 0 };
-
-// returns a new api
-const middleware = R.curry((createStore, reducer, initState) => {
-  const actionHistory = [];
-  const store = createStore((state, action) => {
-    switch (action.type) {
-      case "@@/JUMP":
-        return R.reduce(
-          // loops through all actions up to in ar given by the slice in window.changeState below
-          (accState, nextAction) => {
-            console.log(nextAction.type, nextAction.value);
-            return reducer(accState, nextAction);
-          },
-          initState,
-          action.value
-        );
-      default:
-        return reducer(state, action);
-    }
-  }, initState);
-  // don't do this, just to demo rewinding in the browser console
-  window.changeState = (i) => {
-    actionHistory[i] &&
-      dispatch({ type: "@@/JUMP", value: R.slice(0, i, actionHistory) });
-  };
-
-  const middleDispatch = (action) => {
-    store.dispatch(action);
-    actionHistory.push(action);
-    console.log(actionHistory);
-  };
-  return {
-    getState: store.getState,
-    dispatch: middleDispatch,
-    subscribe: store.subscribe,
-  };
-});
+const initialState = {
+  title: "",
+  presentation: { slides: [], slidePos: [0, 0], settings: {} },
+};
 
 const { getState, dispatch, subscribe } = createStore(
   mainReducer,
@@ -53,30 +21,28 @@ const { getState, dispatch, subscribe } = createStore(
   middleware
 );
 
-const update = renderDOM((state) => {
-  console.log("State @render ---> ", state);
-  return (
-    <div className="container">
-      <h2 className="title">{state.title}</h2>
-      <h5>MONEY: {state.money}</h5>
-      <Slideshow slides={state.slides || []} />
-    </div>
-  );
-}, document.getElementById("packtPubApp"));
+const update = renderDOM(
+  (state) => {
+    const {
+      title,
+      presentation: { slides, slidePos },
+      settings,
+    } = state;
+    return (
+      <div>
+        <h2 className="title">{title}</h2>
+        <Slideshow slides={slides || []} settings={settings} />
+      </div>
+    );
+  },
+  document.getElementById("packtPubApp"),
+  initialState
+);
 
 subscribe(() => {
   // this gets called from the store if data is updated
   update(getState());
 });
 
-dispatch({ type: "TEST_ACTION" });
-dispatch({ type: "DEPOSIT", value: 10 });
-dispatch({ type: "WITHDRAW", value: 3 });
-
-/* let i = 0;
-setInterval(() => {
-  dispatch({
-    type: ["TEST_ACTION", "CUSTOM_TITLE"][++i % 2],
-    value: "We love functional programming",
-  });
-}, 10000); */
+dispatch({ type: "CUSTOM_TITLE", value: "yay custom title" });
+dispatch({ type: "SETUP_SLIDES", value: slides });
