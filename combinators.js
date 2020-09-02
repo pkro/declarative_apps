@@ -20,6 +20,8 @@ module.exports.I = (a) => a;
 module.exports.I_ = (a) => (b) => a(b);
 module.exports.I__ = (a) => (b) => (c) => a(b)(c);
 module.exports.J = (a) => (b) => (c) => (d) => a(b)(a(d)(c));
+//K: returns a function that takes in b parameter that always returns a, no matter the b parameter given is
+//used when argument has to be a function like in compose
 module.exports.K = (a) => (b) => a;
 module.exports.L = (a) => (b) => a(b(b));
 module.exports.M = (a) => a(a);
