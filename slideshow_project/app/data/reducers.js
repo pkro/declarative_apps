@@ -15,12 +15,6 @@ export default function mainReducer(state, action) {
     case "CUSTOM_TITLE":
       const title = action.value;
       return { ...state, title };
-    case "DEPOSIT":
-      //return R.over(R.lensProp("money"), R.add(action.value), state);
-      return { ...state, money: state.money + action.value }; // same (?)
-    case "WITHDRAW":
-      const money = state.money - action.value;
-      return { ...state, money };
     default:
       return state;
   }
