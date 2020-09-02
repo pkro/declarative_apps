@@ -2,12 +2,18 @@ import dom from "../utils/dom";
 import R from "ramda";
 import { Column } from "./SlidesColumns";
 
-export default ({ slides }) => {
-  console.log(slides);
+export default ({ slides = [], settings = {} }) => {
   return (
     <div>
-      <h2>Welcome to the slideshow</h2>
-      <main className="container-fluid">{R.map(Column, slides)}</main>
+      {R.map(
+        (colSlides) => (
+          <Column
+            fullscreen={R.prop("fullscreen", settings)}
+            slides={colSlides}
+          />
+        ),
+        slides
+      )}
     </div>
   );
 };

@@ -2,6 +2,7 @@ import R from "ramda";
 import { setupSlides } from "../utils/slide-utils";
 // mainRecucer :: (Object, Object) -> Object
 export default function mainReducer(state, action) {
+  const { type, value } = action;
   switch (action.type) {
     case "SETUP_SLIDES":
       const presentation = {
@@ -9,6 +10,13 @@ export default function mainReducer(state, action) {
         slides: setupSlides(action.value),
       };
       return { ...state, presentation };
+    case "CHANGE_SETTING":
+      // takes tuple ['settingname', val] and merges object {settinName: val}
+      // into state.settings
+      // R.mergeDeepRight: like {...state, action.value} spread, but merges recursively into object (here: state)
+      return R.mergeDeepRight(state, {
+        settings: R.apply(R.objOf)(value),
+      });
     case "TEST_ACTION":
       //return R.merge(state, {title: 'Packt Pub Presentation App'})
       return { ...state, title: "PAckt pub presentation app" };

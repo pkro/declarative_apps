@@ -1,5 +1,13 @@
 import dom, { fromHTML } from "../utils/dom";
+import { K } from "../utils/combinators";
 import R from "ramda";
+
+// columnClass :: Bool -> String
+const columnClass = R.ifElse(
+  R.equals(true),
+  K("fullscreen presentation"), // argument has to be a function, that's why K is used (just returns the argument every time)
+  K("presentation")
+);
 
 // slideClass :: Slide -> String
 const slideClass = (slide) => `slide ${!slide.active ? "" : "active"}`;
@@ -31,6 +39,6 @@ export const Slide = (slide) => (
   </div>
 );
 // Column :: [Slide] -> VNode
-export const Column = (colSlides) => (
-  <div className="presentation column">{R.map(Slide, colSlides)}</div>
+export const Column = ({ slides, fullscreen = false }) => (
+  <div className={columnClass(fullscreen)}>{R.map(Slide, slides)}</div>
 );

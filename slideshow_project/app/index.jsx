@@ -8,7 +8,7 @@ import R from "ramda";
 import { createStore } from "./data/redux-ish";
 import mainReducer from "./data/reducers";
 import middleware from "./utils/action-history-middleware";
-
+import Controls from "./components/Controls";
 // initialState :: Object
 const initialState = {
   title: "",
@@ -32,6 +32,7 @@ const update = renderDOM(
       <div>
         <h2 className="title">{title}</h2>
         <Slideshow slides={slides || []} settings={settings} />
+        <Controls {...state} dispatch={dispatch} />
       </div>
     );
   },
@@ -41,7 +42,7 @@ const update = renderDOM(
 
 subscribe(() => {
   // this gets called from the store if data is updated
-  update(getState());
+  update(getState(), dispatch);
 });
 
 dispatch({ type: "CUSTOM_TITLE", value: "yay custom title" });
